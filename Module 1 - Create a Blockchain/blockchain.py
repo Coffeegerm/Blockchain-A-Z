@@ -76,6 +76,7 @@ app = Flask(__name__)
 # Creating a Blockchain
 
 blockchain = Blockchain()
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
 # Mining a block
 
@@ -99,10 +100,20 @@ def mine_block():
 
 
 # Getting the full Blockchain
-
-
+@app.route("/get_chain", methods=['GET'])
+def get_chain():
+    response = {'chain': blockchain.chain,
+                'length': len(blockchain.chain)}
     
+    return jsonify(response), 200
     
+@app.route('/is_valid', methods=['GET'])
+def is_valid():
+    response = {'is valid': blockchain.is_chain_valid(blockchain.chain)}
+    return jsonify(response), 200
+
+# Running the app
+app.run(host = '0.0.0.0', port=6000)    
     
     
     
